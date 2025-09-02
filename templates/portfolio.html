@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="portfolio" id="portfolio">
+    <h2 class="heading">My Projects</h2>
+    <div class="portfolio-grid">
+        {% for post in posts %}
+        <div class="portfolio-item">
+            <h3>{{ post.title }}</h3>
+            <div class="post-content">{{ post.content|safe }}</div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}
