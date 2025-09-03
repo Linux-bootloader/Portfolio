@@ -1,50 +1,79 @@
 Copyright © 2025 Jacob Jones. All rights reserved.
 
-Licence Grant
-You (the "Licensee") are granted a limited, non-exclusive, non-transferable, revocable
-licence to download, store and run the accompanying software and associated materials
-(the "Software") solely for personal, private, and local use on your own computer systems.
+Default Licence (Restrictive Use)
+--------------------------------
+Unless a commercial licence is obtained as set out below, all rights in
+and to this software and associated materials (the "Software") are
+strictly reserved by the copyright holder, Jacob Jones (the "Licensor").
 
-Restrictions
-Except as expressly permitted above, the Licensee must not, without the prior written
-consent of the Licensor:
-    (a) copy, reproduce, or distribute the Software, in whole or in part;
-    (b) publish, upload, or make the Software available to the public through any medium,
-        including but not limited to websites, public repositories, or hosted services;
-    (c) use the Software for any commercial purpose, including offering services to third
-        parties, selling, licensing, sublicensing, or incorporating the Software into
-        commercial products;
-    (d) create, distribute, or make available any modification, adaptation, translation,
-        or derivative work based upon the Software;
-    (e) remove, obscure, or alter any copyright, trademark, or proprietary notices
-        contained within the Software.
+By default, permission is granted only to view, download, and run the
+Software locally for private, personal, and non-commercial purposes.
+
+The Licensee must not, without prior written consent from the Licensor:
+  • Copy, reproduce, or redistribute the Software, in whole or part;
+  • Deploy, publish, or host the Software on a public-facing platform;
+  • Use the Software for any commercial purpose, direct or indirect;
+  • Modify and redistribute the Software or create derivative works;
+  • Remove or obscure copyright/proprietary notices.
+
+Commercial Licence Option
+-------------------------
+Notwithstanding the restrictions above, a separate commercial
+licence is available for purchase through the Licensor’s authorised
+Gumroad page:
+
+    https://jacobjones.gumroad.com/l/Coffee
+
+Upon confirmed purchase, the Licensee is granted a limited,
+non-exclusive, non-transferable licence to:
+
+  • Deploy, publicly host, and use the Software for personal,
+    professional, or commercial purposes (e.g. for a portfolio
+    or business website);
+
+Subject to the following restrictions:
+  • The Software may not be resold, sublicensed, or redistributed
+    in its original or modified form;
+  • The Software may not be rebraned, repackaged, or marketed
+    as a template or product for sale;
+  • Authorship must not be misrepresented;
+  • Derivative works for third-party resale or distribution require
+    separate written agreement with the Licensor.
+
+All rights not expressly granted under the commercial licence remain
+reserved by the Licensor.
 
 Intellectual Property
-All intellectual property rights in and to the Software remain the exclusive property
-of the copyright holder, Jacob Jones (the "Licensor"). No assignment or transfer of
-intellectual property rights is made or intended.
+---------------------
+All copyright and intellectual property rights in and to the Software
+remain vested solely in Jacob Jones. The commercial licence confers a
+usage right only and does not transfer ownership.
 
 Termination
-This licence will terminate automatically if the Licensee breaches any term of this
-agreement. Upon termination, the Licensee must immediately destroy all copies of the
-Software in their possession.
+-----------
+Any breach of the above terms automatically terminates the licence
+(granted or purchased). On termination, the Licensee must immediately
+cease all use of the Software and remove all deployed or hosted copies.
 
-Disclaimer of Warranty
-The Software is provided “as is” without warranty of any kind, express or implied,
-including without limitation warranties of merchantability, fitness for a particular
-purpose, and non-infringement.
+Warranty Disclaimer
+-------------------
+The Software is provided “as is” without warranty of any kind, express
+or implied, including but not limited to warranties of merchantability,
+fitness for a particular purpose, or non-infringement.
 
 Limitation of Liability
-To the maximum extent permitted by law, the Licensor shall not be liable for any loss,
-damage, claim, or cost whatsoever, including any consequential, indirect, or incidental
-damages, arising out of or related to the use of or inability to use the Software.
+-----------------------
+To the maximum extent permitted by law, the Licensor shall not be liable
+for any damages (whether direct, indirect, incidental, or consequential)
+arising out of or related to the use of, or inability to use, the Software.
 
 Governing Law
-This Licence shall be governed by and construed in accordance with the laws in force
-in the State of Western Australia, Australia. The parties submit to the exclusive
-jurisdiction of the courts of Western Australia and of the Commonwealth of Australia.
+-------------
+This Licence shall be governed by and construed in accordance with the
+laws of Western Australia, Australia. The parties submit to the exclusive
+jurisdiction of the courts of Western Australia and the Commonwealth of
+Australia.
 
 ---
 
-Copyright © 2025 Jacob Jones
-All rights reserved.
+© 2025 Jacob Jones
