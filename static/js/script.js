@@ -52,3 +52,21 @@ const isIPad = (
   window.addEventListener("resize", checkDevice);
   window.addEventListener("orientationchange", checkDevice);
 });
+
+document.addEventListener("DOMContentLoaded", function () {
+  // Get current path (e.g. "/portfolio")
+  const currentPath = window.location.pathname;
+
+  // Grab all nav links
+  const navLinks = document.querySelectorAll(".navbar a");
+
+  navLinks.forEach(link => {
+    // Remove any existing active class
+    link.classList.remove("active");
+
+    // If the link's href matches the current path, add "active"
+    if (link.getAttribute("href") === currentPath) {
+      link.classList.add("active");
+    }
+  });
+});

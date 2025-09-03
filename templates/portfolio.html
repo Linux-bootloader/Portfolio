@@ -1,18 +1,23 @@
 {% extends "base.html" %}
-
+  
 {% block content %}
-<section class="portfolio">
-  <h2>{{ post.title }}</h2>
-
-  <!-- render safe HTML -->
-  <div class="post-content">
-    {{ post.content | safe }}
-  </div>
-
-  <!-- nav buttons -->
-  <div class="nav-buttons">
-    <a href="{{ url_for('portfolio', index=prev_index) }}">← Previous</a>
-    <a href="{{ url_for('portfolio', index=next_index) }}">Next →</a>
-  </div>
-</section>
+<div class="portfolio-container">
+  
+    <div class="project-card">
+        <h2 class="project-title">{{ post.title }}</h2>
+        <div class="project-content">
+            {{ post.content | safe }}
+        </div>
+    </div>
+  
+    <div class="project-nav">
+        <a href="{{ url_for('portfolio', index=prev_index) }}" class="nav-link">
+            <button class="nav-btn prev-btn">← Previous</button>
+        </a>
+        <a href="{{ url_for('portfolio', index=next_index) }}" class="nav-link">
+            <button class="nav-btn next-btn">Next →</button>
+        </a>
+    </div>
+  
+</div>
 {% endblock %}
