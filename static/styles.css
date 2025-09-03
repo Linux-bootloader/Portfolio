@@ -94,19 +94,6 @@ nav a {
 .menu-button{
   display: none;
 }
-@media(max-width: 800px){
-  .hideOnMobile{
-    display: none;
-  }
-  .menu-button{
-    display: block;
-  }
-}
-@media(max-width: 400px){
-  .sidebar{
-    width: 100%;
-  }
-}
 
 .navbar a:hover,
 .navbar a.active {
@@ -337,13 +324,13 @@ nav a {
     justify-content: center;
     min-height: 100vh;
     padding: 80px 10%;
-    background: #081b29; /* matches global theme */
+    background: #081b29; 
     color: #ededed;
 }
 
 .project-card {
     position: relative;
-    background: #0f2d40;      /* slightly lighter than background */
+    background: #0f2d40;  
     border-radius: 12px;
     padding: 40px;
     width: 100%;
@@ -423,18 +410,12 @@ nav a {
 @keyframes slideInLeft {
   from {
     opacity: 0;
-    transform: translateX(-50px); /* start shifted left */
+    transform: translateX(-50px);
   }
   to {
     opacity: 1;
-    transform: translateX(0);     /* normal position */
+    transform: translateX(0); 
   }
-}
-
-@keyframes manipActiveHover {
-    100% {
-        pointer-events: auto;
-    }
 }
 
 
@@ -442,8 +423,12 @@ nav a {
     .home-content {
         max-width: 100%;
     }
+    .logo {
+        margin-left: 20px;
+    }
     .home {
         padding-top: 10%;
+        margin: 5%;
         background: none;
         padding-left: 10vw;
         padding-right: 10vw;
@@ -481,7 +466,6 @@ nav a {
         animation: slideInLeft 0.8s ease forwards;
     }
 
-        /* stagger timing on the two buttons */
     .btn-box a:nth-child(1) {
         animation-delay: 1.9s;
     }
@@ -489,12 +473,34 @@ nav a {
         animation-delay: 2.2s;
     }
 
-        /* keep your hover effect */
     .btn-box a:hover {
         color: #00abf0;
         background: #081b29;
     }
 
+    .home-sci {
+        position: absolute;
+        width: 170px;
+        margin-top: 30px;
+    }
+    .home-sci a {
+        margin-right: 15px;
+    }
+
+}
+
+@media(max-width: 800px){
+  .hideOnMobile{
+    display: none;
+  }
+  .menu-button{
+    display: block;
+  }
+}
+@media(max-width: 400px){
+  .sidebar{
+    width: 100%;
+  }
 }
 
 .mobile-message,
