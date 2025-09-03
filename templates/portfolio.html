@@ -1,15 +1,18 @@
 {% extends "base.html" %}
 
 {% block content %}
-<section class="portfolio" id="portfolio">
-    <h1>My Projects</h1>
-    <div class="portfolio-grid">
-        {% for post in posts %}
-        <div class="portfolio-item">
-            <h3>{{ post.title }}</h3>
-            <div class="post-content">{{ post.content|safe }}</div>
-        </div>
-        {% endfor %}
-    </div>
+<section class="portfolio">
+  <h2>{{ post.title }}</h2>
+
+  <!-- render safe HTML -->
+  <div class="post-content">
+    {{ post.content | safe }}
+  </div>
+
+  <!-- nav buttons -->
+  <div class="nav-buttons">
+    <a href="{{ url_for('portfolio', index=prev_index) }}">← Previous</a>
+    <a href="{{ url_for('portfolio', index=next_index) }}">Next →</a>
+  </div>
 </section>
 {% endblock %}

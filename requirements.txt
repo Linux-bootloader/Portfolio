@@ -1,0 +1,3 @@
+Flask
+notion-client
+python-dotenv
