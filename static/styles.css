@@ -8,22 +8,9 @@
 }
 
 body {
-/* comment out background if you use image instead */    
+    min-height: 100vh;
     background: #081b29;
     color: #ededed;
-}
-
-.header {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    padding: 20px 10%;
-    background: transparent;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    z-index: 100;
 }
 
 .logo {
@@ -32,6 +19,12 @@ body {
     color: #ededed;
     text-decoration: none;
     font-weight: 600;
+}
+
+.navbar li:first-child {
+    margin-right: auto;
+    position: relative;
+
 }
 
 .logo::before {
@@ -46,17 +39,82 @@ body {
     animation-delay: .4s;
 }
 
-.navbar a {
+nav {
+    padding-top: 5px;
+    background-color: transparent;
+    z-index: 10;
+}
+
+nav ul {
+    width: 100%;
+    list-style: none;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+nav li {
+    height: 50px;
+}
+
+nav a {
     font-size: 18px;
-    color: #ededed;
-    text-decoration: none;
     font-weight: 500;
-    margin-left: 35px;
-    transition: .3s;
+    height: 100%;
+    padding: 0 30px;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    color:  #ededed;
+}
+
+
+.sidebar{
+    position: fixed;
+    top: 0; 
+    right: 0;
+    height: 100vh;
+    width: 250px;
+    background-color: #081b2956;
+    backdrop-filter: blur(12px);
+    box-shadow: -10px 0 10px rgba(0, 0, 0, 0.1);
+    list-style: none;
+    display: none;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    z-index: 15;
+}
+.sidebar li{
+  width: 100%;
+}
+.sidebar a{
+  width: 100%;
+}
+.menu-button{
+  display: none;
+}
+@media(max-width: 800px){
+  .hideOnMobile{
+    display: none;
+  }
+  .menu-button{
+    display: block;
+  }
+}
+@media(max-width: 400px){
+  .sidebar{
+    width: 100%;
+  }
 }
 
 .navbar a:hover,
 .navbar a.active {
+    color: #00abf0;
+}
+
+.sidebar a:hover,
+.sidebar a.active {
     color: #00abf0;
 }
 
@@ -85,7 +143,7 @@ body {
 
 .home-content h1 {
     position: relative;
-    font-size: 40px;
+    font-size: clamp(2.3rem, 3.8vw, 5rem);
     font-weight: 700;
     line-height: 1.2;
 }
@@ -104,7 +162,7 @@ body {
 
 .home-content h3 {
     position: relative;
-    font-size: 28px;
+    font-size: clamp(1.5rem, 2.6vw, 3rem);
     font-weight: 700;
     color: #00abf0;
 }
@@ -189,11 +247,11 @@ body {
     color: #00abf0;
 }
 
-.btn-box a:nth-child(2):hover {
+#btn2:hover {
     color: #081b29;
 }
 
-.btn-box a:nth-child(2)::before {
+#btn2::before {
     background: #00abf0;
 }
 
@@ -271,43 +329,6 @@ body {
 .home-sci a:hover::before {
     width: 100%;
 }
-
-
-.home-imgHover {
-    position: absolute;
-    top: 0;
-    right: 0px;
-    width: 50%;
-    height: 100%;
-    background: transparent;
-    transition: 3s;
-    animation: manipActiveHover .1s forwards;
-    animation-delay: 4s;
-    pointer-events: none;
-    z-index: 5;
-}
-
-.home-imgHover:hover {
-    background: #081b29;
-    opacity: .8;
-} 
-
-.home-imgHover::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 120%;
-    height: 100%;
-    background: #081b29;
-    animation: showRight 1s ease forwards;
-    animation-delay: 2s;
-    z-index: 100;
-}
-
-/* ============================= */
-/* Portfolio Page Theme Extension */
-/* ============================= */
 
 .portfolio-container {
     display: flex;
@@ -399,6 +420,16 @@ body {
     }
 }
 
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-50px); /* start shifted left */
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);     /* normal position */
+  }
+}
 
 @keyframes manipActiveHover {
     100% {
@@ -406,12 +437,71 @@ body {
     }
 }
 
-/* Device-specific messages (extra CSS) */
+
+@media (max-width: 790px) {
+    .home-content {
+        max-width: 100%;
+    }
+    .home {
+        padding-top: 10%;
+        background: none;
+        padding-left: 10vw;
+        padding-right: 10vw;
+        text-align: top;
+        justify-content: left;
+        align-items: flex-start;
+    }
+    .btn-box {
+        position: relative;
+        display: flex;
+        flex-direction: column; 
+        justify-content: space-evenly;
+        align-items: flex-start;
+        width: 345px;
+        height: auto;
+    }
+
+    .btn-box a {
+        position: relative;
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+        margin: 10px 0;
+        width: 150px;
+        background: #00abf0;
+        border: 2px solid #00abf0;
+        border-radius: 8px;
+        font-size: 19px;
+        color: #081b29;
+        font-weight: 600;
+        letter-spacing: 1px;
+        text-decoration: none;
+        opacity: 0; /* start hidden */
+        animation: slideInLeft 0.8s ease forwards;
+    }
+
+        /* stagger timing on the two buttons */
+    .btn-box a:nth-child(1) {
+        animation-delay: 1.9s;
+    }
+    .btn-box a:nth-child(2) {
+        animation-delay: 2.2s;
+    }
+
+        /* keep your hover effect */
+    .btn-box a:hover {
+        color: #00abf0;
+        background: #081b29;
+    }
+
+}
+
 .mobile-message,
 .ipad-portrait-message {
     display: none;
     position: fixed;
-    inset: 0; /* covers entire screen */
+    inset: 0; 
     background: #081b29;
     color: #ededed;
     font-size: 30px;
