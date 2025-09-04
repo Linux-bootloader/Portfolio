@@ -1,12 +1,21 @@
 import os
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for, flash
+from itsdangerous import URLSafeTimedSerializer
 from notion_client import Client
 from dotenv import load_dotenv
+from flask_wtf import FlaskForm
+from flask_mail import Message, Mail
+from wtforms import StringField, TextAreaField
+from wtforms.validators import DataRequired, Email, Length
 
-# Load .env file into environment
+
+
+
 load_dotenv(dotenv_path='./.env')
 
 app = Flask(__name__)
+app.secret_key = os.getenv("FLASK_SECRET_KEY")
+
 
 NOTION_API_KEY = os.getenv("NOTION_API_KEY")
 DATABASE_ID = os.getenv("NOTION_DATABASE_ID")
@@ -15,6 +24,44 @@ if not NOTION_API_KEY or not DATABASE_ID:
     raise ValueError("⚠️ NOTION_API_KEY or NOTION_DATABASE_ID not set. Check your .env file.")
 
 notion = Client(auth=NOTION_API_KEY)
+
+
+app.config['MAIL_SERVER']='live.smtp.mailtrap.io'
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USERNAME'] = 'api'
+app.config['MAIL_PASSWORD'] = os.getenv("SMTP_API_TOKEN")
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USE_SSL'] = False
+
+s = URLSafeTimedSerializer(app.secret_key)
+
+def generate_verification_token(email):
+    return s.dumps(email, salt='email-confirm')
+
+def confirm_verification_token(token, expiration=3600):
+    try:
+        email = s.loads(token, salt='email-confirm', max_age=expiration)
+    except:
+        return False
+    return email
+
+mail = Mail(app)
+
+class ContactForm(FlaskForm):
+    name = StringField('Name', validators=[DataRequired(), Length(min=2, max=50)])
+    email = StringField('Email', validators=[DataRequired(), Email()])
+    message = TextAreaField('Message', validators=[DataRequired(), Length(min=10)])
+
+
+
+def send_email(to, subject, template):
+    msg = Message(
+        subject,
+        recipients=[to],
+        html=template,
+        sender='noreply@jacobjones.com.au'
+    )
+    mail.send(msg)
 
 
 # ---- Function to fetch posts from Notion database ----
@@ -36,14 +83,13 @@ def load_posts_from_notion():
     for item in results["results"]:
         post_id = item["id"]
 
-        # Title from Project Name (your DB screenshot shows that)
         title = "Untitled"
         if "Project Name" in item["properties"]:
             project_name = item["properties"]["Project Name"]["title"]
             if project_name:
                 title = project_name[0]["plain_text"]
 
-        # Fetch block children
+        
         blocks = notion.blocks.children.list(post_id)
         content = ""
 
@@ -71,23 +117,23 @@ def load_posts_from_notion():
 
 # ---- ROUTES ----
 
-@app.route("/")
+@app.route("/", methods=["GET"])
 def home():
     return render_template("index.html", title="Home")
 
-@app.route("/about")
+@app.route("/about", methods=["GET"])
 def about():
     return render_template("about.html", title="About Me")
 
-@app.route("/portfolio")
+@app.route("/portfolio", methods=["GET"])
 def portfolio():
     posts = load_posts_from_notion()
 
     if not posts:
         return render_template("portfolio.html", post={"title": "No Posts Found", "content": "Jacob has not just posted anything as of yet"}, prev_index=0, next_index=0)
 
-    index = int(request.args.get("index", 0))   # default: first post (latest)
-    index = max(0, min(index, len(posts) - 1))  # clamp index in range
+    index = int(request.args.get("index", 0))   
+    index = max(0, min(index, len(posts) - 1))  
 
     post = posts[index]
 
@@ -96,7 +142,38 @@ def portfolio():
 
     return render_template("portfolio.html", post=post, prev_index=prev_index, next_index=next_index)
 
+@app.route('/contact', methods=['GET', 'POST'])
+def contact():
+    if request.method == 'POST':
+        name = request.form['name']
+        email = request.form['email']
+        message = request.form['message']
 
-# ---- Run locally ----
+        if not name or not email or not message:
+            flash('All fields are required!')
+            return redirect(url_for('contact'))
+
+        token = generate_verification_token(email)
+        verify_url = url_for('verify_email', token=token, _external=True)
+        html = render_template('verify_email.html', verify_url=verify_url)
+        subject = "Please verify your email"
+        send_email(email, subject, html)
+
+        flash('A verification email has been sent to your email address.')
+        return redirect(url_for('contact'))
+    return render_template('contact.html', title="Contact Me")
+
+@app.route('/verify/<token>')
+def verify_email(token):
+    email = confirm_verification_token(token)
+    if not email:
+        flash('The verification link is invalid or has expired.', 'danger')
+        return redirect(url_for('contact'))
+
+    flash('Your email has been verified successfully!', 'success')
+    return redirect(url_for('contact'))
+
+
+
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=85, debug=True)

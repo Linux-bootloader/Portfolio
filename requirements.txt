@@ -1,3 +1,6 @@
 Flask
 notion-client
 python-dotenv
+flask-wtf
+email-validator
+mailtrap

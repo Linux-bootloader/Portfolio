@@ -388,7 +388,6 @@ nav a {
     font-size: 16px;
 }
 
-
 .project-nav {
     display: flex;
     justify-content: space-between;
@@ -455,6 +454,39 @@ nav a {
   line-height: 1.6;
 }
 
+.contact {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    padding: 0 10%;
+    background: url('./images/Background.png') no-repeat;
+    background-size: cover;
+    background-position: center;
+    color: #ededed;
+    text-align: center;
+}
+
+.contact-contents {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
+    backdrop-filter: blur(15px);
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37);
+    padding: 5%;  
+    margin: 5% 10%;
+}
+
+.contact-contents h1 {
+  font-size: clamp(2.3rem, 3.8vw, 5rem);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.contact-contents p {
+  font-size: 16px;
+  max-width: 700px;
+  line-height: 1.6;
+}
 
 @keyframes fadeIn {
     from { opacity: 0; transform: translateY(20px); }
