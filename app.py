@@ -84,7 +84,7 @@ def portfolio():
     posts = load_posts_from_notion()
 
     if not posts:
-        return render_template("portfolio.html", post={"title": "No Posts Found", "content": "Please add posts to your Notion database"}, prev_index=0, next_index=0)
+        return render_template("portfolio.html", post={"title": "No Posts Found", "content": "Jacob has not just posted anything as of yet"}, prev_index=0, next_index=0)
 
     index = int(request.args.get("index", 0))   # default: first post (latest)
     index = max(0, min(index, len(posts) - 1))  # clamp index in range

@@ -2,9 +2,9 @@
   
 {% block content %}
 <div class="portfolio-container">
-  
+    <h2 class="project-title">{{ post.title }}</h2>
     <div class="project-card">
-        <h2 class="project-title">{{ post.title }}</h2>
+        
         <div class="project-content">
             {{ post.content | safe }}
         </div>

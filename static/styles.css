@@ -41,7 +41,7 @@ body {
 
 nav {
     padding-top: 5px;
-    background-color: transparent;
+    background: transparent;
     z-index: 10;
 }
 
@@ -106,12 +106,15 @@ nav a {
 }
 
 .footer {
-    position: relative;
-    display: flex;
+    position: fixed;
+    display: inline-block;
+    bottom: 10px;
+    right: 10px;
+    color: #ededed;
     font-size: 10px;
     font-family: 300;
-    align-items: center;
     justify-items: right;
+    z-index: 999;
 }
 
 .home {
@@ -121,7 +124,7 @@ nav a {
     background-position: center;
     display: flex;
     align-items: center;
-    padding: 0 10%;
+    padding: 0 5%;
 }
 
 .home-content {
@@ -259,7 +262,7 @@ nav a {
 }
 
 .home-sci {
-    position: absolute;
+    position: fixed;
     bottom: 40px;
     width: 170px;
     display: flex;
@@ -324,23 +327,52 @@ nav a {
     justify-content: center;
     min-height: 100vh;
     padding: 80px 10%;
-    background: #081b29; 
+    background: url('./images/Background.png') no-repeat; 
+    background-size: cover;
+    background-position: center;
     color: #ededed;
 }
 
 .project-card {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37);
+    padding: 5%;  
+    margin: 0 10%;
     position: relative;
-    background: #0f2d40;  
-    border-radius: 12px;
-    padding: 40px;
     width: 100%;
-    max-width: 700px;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+    max-width: 700px;  
     margin-bottom: 40px;
     overflow: hidden;
     animation: fadeIn 0.8s ease-out;
 }
 
+.project-title {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37);
+    padding: 2.5%; 
+    margin: 0 10%;
+    position: relative;
+    width: 100%;
+    max-width: 700px;  
+    margin-bottom: 5px;
+    overflow: hidden;
+    animation: fadeIn 0.8s ease-out;
+    text-align: center;
+}
+
+.project-title h2 {
+    font-size: clamp(1.8rem, 2.6vw, 3rem);
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: #ffffff;
+    position: relative;
+}
 
 .project-card h2 {
     font-size: 28px;
@@ -348,16 +380,6 @@ nav a {
     margin-bottom: 20px;
     color: #ffffff;
     position: relative;
-}
-.project-card h2::before {
-    content: '';
-    position: absolute;
-    height: 100%;
-    width: 100%;
-    top: 0;
-    right: 0;
-    background: #081b29;
-    animation: showRight 1s ease forwards;
 }
 
 .project-card p {
@@ -396,29 +418,35 @@ nav a {
 }
 
 .aboutme {
-  display: flex; /* Fix flexbox */
-  flex-direction: column; /* Stack h1 and p vertically */
-  justify-content: center; /* Center vertically */
-  align-items: center; /* Center horizontally */
-  height: 100vh;
-  padding: 20px 10%;
-  background-color: #081b29;
-  color: #ededed;
-  text-align: center; /* Keep text nicely centered */
+    display: flex;
+    flex-direction: column; 
+    justify-content: center; 
+    align-items: center; 
+    height: 100vh;
+    padding: 0 10%;
+    background: url('./images/Background.png') no-repeat;
+    background-size: cover;
+    background-position: center;
+    color: #ededed;
+    text-align: center;
 }
 
 .aboutme-contents {
-    background: #081b2979;
+    position: fixed;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
     backdrop-filter: blur(15px);
-    border: 5px;
-    border-radius: 10px;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37);
+    padding: 5%;  
+    margin: 0 10%;
 }
 
 .aboutme-contents h1 {
   font-size: clamp(2.3rem, 3.8vw, 5rem);
   font-weight: 700;
   line-height: 1.2;
-  margin-bottom: 20px; /* spacing between h1 and p */
+  margin-bottom: 20px;
 }
 
 .aboutme-contents p {
@@ -426,6 +454,8 @@ nav a {
   max-width: 700px;
   line-height: 1.6;
 }
+
+
 @keyframes fadeIn {
     from { opacity: 0; transform: translateY(20px); }
     to   { opacity: 1; transform: translateY(0); }
@@ -457,11 +487,8 @@ nav a {
         margin-left: 20px;
     }
     .home {
-        padding-top: 10%;
         margin: 5%;
         background: none;
-        padding-left: 10vw;
-        padding-right: 10vw;
         text-align: top;
         justify-content: left;
         align-items: flex-start;
@@ -492,7 +519,7 @@ nav a {
         font-weight: 600;
         letter-spacing: 1px;
         text-decoration: none;
-        opacity: 0; /* start hidden */
+        opacity: 0;
         animation: slideInLeft 0.8s ease forwards;
     }
 
