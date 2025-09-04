@@ -396,36 +396,36 @@ nav a {
 }
 
 .aboutme {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-height: 100vh;
-    padding: 80px 10%;
-    background: #081b29; 
-    color: #ededed;
+  display: flex; /* Fix flexbox */
+  flex-direction: column; /* Stack h1 and p vertically */
+  justify-content: center; /* Center vertically */
+  align-items: center; /* Center horizontally */
+  height: 100vh;
+  padding: 20px 10%;
+  background-color: #081b29;
+  color: #ededed;
+  text-align: center; /* Keep text nicely centered */
 }
 
-.aboutme h1 {
-    position: relative;
-    font-size: clamp(2.3rem, 3.8vw, 5rem);
-    font-weight: 700;
-    line-height: 1.2;
-    padding-bottom: 5%;
+.aboutme-contents {
+    background: #081b2979;
+    backdrop-filter: blur(15px);
+    border: 5px;
+    border-radius: 10px;
 }
 
-.aboutme h1::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 100%;
-    height: 100%;
-    background: #081b29;
-    animation: showRight 1s ease forwards;
-    animation-delay: 1s;
+.aboutme-contents h1 {
+  font-size: clamp(2.3rem, 3.8vw, 5rem);
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 20px; /* spacing between h1 and p */
 }
 
+.aboutme-contents p {
+  font-size: 16px;
+  max-width: 700px;
+  line-height: 1.6;
+}
 @keyframes fadeIn {
     from { opacity: 0; transform: translateY(20px); }
     to   { opacity: 1; transform: translateY(0); }
