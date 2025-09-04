@@ -75,6 +75,9 @@ def load_posts_from_notion():
 def home():
     return render_template("index.html", title="Home")
 
+@app.route("/about")
+def about():
+    return render_template("about.html", title="About Me")
 
 @app.route("/portfolio")
 def portfolio():
