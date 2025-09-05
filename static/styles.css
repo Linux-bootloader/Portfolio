@@ -706,11 +706,14 @@ nav a {
     justify-items: right;
     z-index: 999;
   }
+  .aboutme {
+    margin: 5% auto;
+  }
   .aboutme-contents {
     position: static;
     top: 0;
     bottom: 0;
-    margin: 20% 0;
+
   }
   .contact-contents {
     position: static;
