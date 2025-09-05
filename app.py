@@ -230,5 +230,3 @@ def verify_email(token):
     flash('Your email has been verified successfully and your message has been sent!', 'success')
     return redirect(url_for('contact'))
 
-if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=85)

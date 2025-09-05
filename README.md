@@ -25,16 +25,22 @@ source env/bin/activate
 pip install -r requirements.txt
 ```
 
-Run the app locally: (in app.py you will need to uncomment the app.run line)
+Run the app locally: (in app.py you will need to add these lines to the bottom of the file)
 
+```python
+if __name__ == "__main__":
+    app.run(host='0.0.0.0', port=85)
+
+```
+Then run
 ```bash
-flask run --debug
+/path/to/your/project/env/bin/python app.py
 ```
 
 By default this starts the app at:
 
 ```
-http://127.0.0.1:5000
+http://127.0.0.1:85
 ```
 
 ---
