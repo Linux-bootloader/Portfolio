@@ -714,9 +714,13 @@ nav a {
   }
   .contact-contents {
     position: static;
-    top: 0;
-    bottom: 0;
-    margin: 20% 0;
+    width: 100%;
+  }
+  .contact-form {
+    position: static;
+    width: 100%;
+    margin: 5% 0;
+    padding: 5%;
   }
 
 }
