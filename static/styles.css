@@ -349,13 +349,15 @@ nav a {
   margin: 0 10%;
   position: relative;
   width: 100%;
-  max-width: 700px;
+  max-width: 80%;
   margin-bottom: 40px;
   overflow: hidden;
   animation: fadeIn 0.8s ease-out;
 }
 
 .project-title {
+  text-align: center;
+  font-size: clamp(2rem, 3.5vw, 3rem);
   background: linear-gradient(
     135deg,
     rgba(255, 255, 255, 0.1),
@@ -369,7 +371,7 @@ nav a {
   margin: 0 10%;
   position: relative;
   width: 100%;
-  max-width: 700px;
+  max-width: 80%;
   margin-bottom: 5px;
   overflow: hidden;
   animation: fadeIn 0.8s ease-out;
@@ -428,7 +430,8 @@ nav a {
 }
 
 .project-card li {
-  margin-left: 15%;
+  margin: 5px auto;
+  margin-left: 10%;
 }
 
 .project-nav {
