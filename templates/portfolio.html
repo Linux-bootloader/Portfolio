@@ -6,7 +6,16 @@
   
 {% block content %}
 <div class="portfolio-container">
-    <h2 class="project-title">{{ post.title }}</h2>
+    <h2 class="project-title">
+        {% if page_icon %}
+            {% if page_icon.startswith('http') %}
+                <img src="{{ page_icon }}" alt="Page Icon" class="page-icon">
+            {% else %}
+                <span class="page-emoji">{{ page_icon }}</span>
+            {% endif %}
+        {% endif %}
+        {{ post.title }}
+    </h2>
     <div class="project-card">
         
         <div class="project-content">

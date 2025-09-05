@@ -20,9 +20,11 @@ app.secret_key = os.getenv("FLASK_SECRET_KEY")
 
 NOTION_API_KEY = os.getenv("NOTION_API_KEY")
 DATABASE_ID = os.getenv("NOTION_DATABASE_ID")
+PAGE_ID = os.getenv("NOTION_PAGE_ID")
+SMTP_API_TOKEN = os.getenv("SMTP_API_TOKEN")
 
-if not NOTION_API_KEY or not DATABASE_ID:
-    raise ValueError("⚠️ NOTION_API_KEY or NOTION_DATABASE_ID not set. Check your .env file.")
+if not NOTION_API_KEY or not DATABASE_ID or not PAGE_ID:
+    raise ValueError("⚠️ NOTION_API_KEY or NOTION_DATABASE_ID or NOTION_PAGE_ID not set. Check your .env file.")
 
 notion = Client(auth=NOTION_API_KEY)
 
@@ -30,7 +32,7 @@ notion = Client(auth=NOTION_API_KEY)
 app.config['MAIL_SERVER']='live.smtp.mailtrap.io'
 app.config['MAIL_PORT'] = 587
 app.config['MAIL_USERNAME'] = 'api'
-app.config['MAIL_PASSWORD'] = os.getenv("SMTP_API_TOKEN")
+app.config['MAIL_PASSWORD'] = SMTP_API_TOKEN
 app.config['MAIL_USE_TLS'] = True
 app.config['MAIL_USE_SSL'] = False
 
@@ -117,10 +119,34 @@ def load_posts_from_notion():
                 content += f"<ul><li>{text}</li></ul>"
             elif t == "numbered_list_item":
                 content += f"<ol><li>{text}</li></ol>"
+            elif t == "divider":
+                content += "<hr>"
+            elif t == "quote":
+                content += f"<blockquote>{text}</blockquote>"
+            elif t == "code":
+                content += f"<pre><code>{text}</code></pre>"
+            elif t == "to_do":
+                checked = block[t].get("checked", False)
+                checkbox = "☑" if checked else "☐"
+                content += f"{checkbox} {text}<br>"
+            elif t == "toggle":
+                content += f"<details><summary>{text}</summary></details>"
+            elif t == "image":
+                image_url = block[t]["file"]["url"]
+                content += f'<img src="{image_url}" alt="Image"><br>'
 
         posts.append({"title": title, "content": content})
     return posts
 
+def get_page_icon(page_id):
+    page = notion.pages.retrieve(page_id)
+    icon = page.get("icon")
+    if icon["type"] == "emoji":
+        return icon["emoji"]
+    elif icon["type"] in ["file", "external"]:
+        return icon[icon["type"]]["url"]
+
+    return None
 
 @app.route("/", methods=["GET"])
 def home():
@@ -133,7 +159,8 @@ def about():
 @app.route("/portfolio", methods=["GET"])
 def portfolio():
     posts = load_posts_from_notion()
-
+    page_icon = get_page_icon(PAGE_ID)
+    
     if not posts:
         return render_template("portfolio.html", post={"title": "No Posts Found", "content": "Jacob has not just posted anything as of yet"}, prev_index=0, next_index=0)
 
@@ -145,7 +172,7 @@ def portfolio():
     prev_index = (index - 1) % len(posts)
     next_index = (index + 1) % len(posts)
 
-    return render_template("portfolio.html", post=post, prev_index=prev_index, next_index=next_index)
+    return render_template("portfolio.html", page_icon=page_icon, post=post, prev_index=prev_index, next_index=next_index)
 
 info = ''
 @app.route('/contact', methods=['GET', 'POST'])
@@ -203,5 +230,5 @@ def verify_email(token):
     flash('Your email has been verified successfully and your message has been sent!', 'success')
     return redirect(url_for('contact'))
 
-#if __name__ == "__main__":
-#    app.run(host='0.0.0.0', port=85)
+if __name__ == "__main__":
+    app.run(host='0.0.0.0', port=85)
