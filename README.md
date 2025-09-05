@@ -1,4 +1,3 @@
-```markdown
 # 🚀 Flask Portfolio App
 
 This is a Flask-based portfolio application.  
