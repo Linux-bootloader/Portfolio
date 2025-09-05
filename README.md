@@ -25,7 +25,7 @@ source env/bin/activate
 pip install -r requirements.txt
 ```
 
-Run the app locally:
+Run the app locally: (in app.py you will need to uncomment the app.run line)
 
 ```bash
 flask run --debug
