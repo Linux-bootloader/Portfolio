@@ -18,8 +18,8 @@ This README explains how to run the app **locally for development** and how to *
 Clone and install dependencies:
 
 ```bash
-git clone https://github.com/<your-username>/<your-repo>.git
-cd <your-repo>
+git clone https://github.com/Linux-bootloader/Portfolio.git
+cd Portfolio
 python3 -m venv env
 source env/bin/activate
 pip install -r requirements.txt
