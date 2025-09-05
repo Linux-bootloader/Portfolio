@@ -1,4 +1,7 @@
-// give the class 'active' to the current nav link
+// Copyright © 2025 Jacob Jones. All rights reserved.
+// Licensed for private, personal, non-commercial use only.
+// Commercial licence: https://jacobjones.gumroad.com/l/Coffee
+
 document.addEventListener("DOMContentLoaded", function () {
 
   const currentPath = window.location.pathname;
@@ -13,7 +16,6 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 });
 
-// give the class 'active' to the current nav link for mobile nav
 document.addEventListener("DOMContentLoaded", function () {
 
   const currentPath = window.location.pathname;

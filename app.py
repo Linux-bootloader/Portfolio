@@ -1,3 +1,6 @@
+# Copyright © 2025 Jacob Jones. All rights reserved.
+# Licensed for private, personal, non-commercial use only.
+# Commercial licence available: https://jacobjones.gumroad.com/l/Coffee
 
 import os
 from flask import Flask, render_template, request, redirect, url_for, flash, session
@@ -51,7 +54,6 @@ class ContactForm(FlaskForm):
     message = TextAreaField('Message', validators=[DataRequired(), Length(min=10)])
 
 
-
 def send_email(to, subject, template):
     msg = Message(
         subject,
@@ -70,7 +72,6 @@ def sendEmail(email_template):
     )
     mail.send(msg)
 
-# ---- Function to fetch posts from Notion database ----
 def load_posts_from_notion():
     results = notion.databases.query(
         database_id=DATABASE_ID,
@@ -121,8 +122,6 @@ def load_posts_from_notion():
     return posts
 
 
-# ---- ROUTES ----
-
 @app.route("/", methods=["GET"])
 def home():
     return render_template("index.html", title="Home")
@@ -160,14 +159,12 @@ def contact():
             flash('All fields are required!', 'danger')
             return redirect(url_for('contact'))
 
-        # Save form data in session (temporary storage)
         session['contact_data'] = {
             'name': name,
             'email': email,
             'message': message
         }
 
-        # Generate token + send verify email
         token = generate_verification_token(email)
         verify_url = url_for('verify_email', token=token, _external=True)
         html = render_template('verify_email.html', verify_url=verify_url)
@@ -177,11 +174,9 @@ def contact():
         flash('A verification email has been sent to your email address.', 'info')
         return redirect(url_for('contact'))
 
-    # Normal GET request
+
     return render_template('contact.html', title="Contact Me")
 
-
-# ---------- VERIFY ROUTE ----------
 @app.route('/verify/<token>')
 def verify_email(token):
     email = confirm_verification_token(token)
@@ -190,7 +185,7 @@ def verify_email(token):
         flash('The verification link is invalid or has expired.', 'danger')
         return redirect(url_for('contact'))
 
-    # Retrieve form data from session
+
     contact_data = session.get('contact_data')
     if not contact_data:
         flash('Session expired. Please resubmit the form.', 'warning')
@@ -199,15 +194,14 @@ def verify_email(token):
     name = contact_data['name']
     message = contact_data['message']
 
-    # Render and send the final email
+
     email_template = render_template('Email.html', name=name, email=email, msg=message)
     sendEmail(email_template)
 
-    # Clear session data after sending
     session.pop('contact_data', None)
 
     flash('Your email has been verified successfully and your message has been sent!', 'success')
     return redirect(url_for('contact'))
 
-if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=85, debug=True)
+#if __name__ == "__main__":
+#    app.run(host='0.0.0.0', port=85)
