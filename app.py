@@ -1,5 +1,6 @@
+
 import os
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for, flash, session
 from itsdangerous import URLSafeTimedSerializer
 from notion_client import Client
 from dotenv import load_dotenv
@@ -7,9 +8,6 @@ from flask_wtf import FlaskForm
 from flask_mail import Message, Mail
 from wtforms import StringField, TextAreaField
 from wtforms.validators import DataRequired, Email, Length
-
-
-
 
 load_dotenv(dotenv_path='./.env')
 
@@ -63,6 +61,14 @@ def send_email(to, subject, template):
     )
     mail.send(msg)
 
+def sendEmail(email_template):
+    msg = Message(
+        subject='New Message from portfolio contact',
+        recipients=['admin@jacobjones.com.au'],
+        html=email_template,
+        sender='portfolio@jacobjones.com.au'
+    )
+    mail.send(msg)
 
 # ---- Function to fetch posts from Notion database ----
 def load_posts_from_notion():
@@ -142,38 +148,66 @@ def portfolio():
 
     return render_template("portfolio.html", post=post, prev_index=prev_index, next_index=next_index)
 
+info = ''
 @app.route('/contact', methods=['GET', 'POST'])
 def contact():
     if request.method == 'POST':
-        name = request.form['name']
-        email = request.form['email']
-        message = request.form['message']
+        name = request.form.get('name')
+        email = request.form.get('email')
+        message = request.form.get('message')
 
         if not name or not email or not message:
-            flash('All fields are required!')
+            flash('All fields are required!', 'danger')
             return redirect(url_for('contact'))
 
+        # Save form data in session (temporary storage)
+        session['contact_data'] = {
+            'name': name,
+            'email': email,
+            'message': message
+        }
+
+        # Generate token + send verify email
         token = generate_verification_token(email)
         verify_url = url_for('verify_email', token=token, _external=True)
         html = render_template('verify_email.html', verify_url=verify_url)
         subject = "Please verify your email"
         send_email(email, subject, html)
 
-        flash('A verification email has been sent to your email address.')
+        flash('A verification email has been sent to your email address.', 'info')
         return redirect(url_for('contact'))
+
+    # Normal GET request
     return render_template('contact.html', title="Contact Me")
 
+
+# ---------- VERIFY ROUTE ----------
 @app.route('/verify/<token>')
 def verify_email(token):
     email = confirm_verification_token(token)
+
     if not email:
         flash('The verification link is invalid or has expired.', 'danger')
         return redirect(url_for('contact'))
 
-    flash('Your email has been verified successfully!', 'success')
+    # Retrieve form data from session
+    contact_data = session.get('contact_data')
+    if not contact_data:
+        flash('Session expired. Please resubmit the form.', 'warning')
+        return redirect(url_for('contact'))
+
+    name = contact_data['name']
+    message = contact_data['message']
+
+    # Render and send the final email
+    email_template = render_template('Email.html', name=name, email=email, msg=message)
+    sendEmail(email_template)
+
+    # Clear session data after sending
+    session.pop('contact_data', None)
+
+    flash('Your email has been verified successfully and your message has been sent!', 'success')
     return redirect(url_for('contact'))
-
-
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=85, debug=True)
