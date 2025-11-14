@@ -198,7 +198,7 @@ def contact():
         subject = "Please verify your email"
         send_email(email, subject, html)
 
-        flash('A verification email has been sent to your email address.', 'info')
+        flash('A verification email has been sent to your email address. Please note the link will NOT work if you are in a private tab', 'info')
         return redirect(url_for('contact'))
 
 

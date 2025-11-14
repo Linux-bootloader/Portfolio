@@ -269,6 +269,7 @@ nav a {
   width: 170px;
   display: flex;
   justify-content: space-between;
+  margin-top: 5%;
 }
 
 .home-sci::before {
