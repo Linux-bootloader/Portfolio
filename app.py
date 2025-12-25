@@ -12,7 +12,7 @@ from flask_mail import Message, Mail
 from wtforms import StringField, TextAreaField
 from wtforms.validators import DataRequired, Email, Length
 
-load_dotenv(dotenv_path='./.env')
+load_dotenv()
 
 app = Flask(__name__)
 app.secret_key = os.getenv("FLASK_SECRET_KEY")
@@ -22,6 +22,7 @@ NOTION_API_KEY = os.getenv("NOTION_API_KEY")
 DATABASE_ID = os.getenv("NOTION_DATABASE_ID")
 PAGE_ID = os.getenv("NOTION_PAGE_ID")
 SMTP_API_TOKEN = os.getenv("SMTP_API_TOKEN")
+
 
 if not NOTION_API_KEY or not DATABASE_ID or not PAGE_ID:
     raise ValueError("⚠️ NOTION_API_KEY or NOTION_DATABASE_ID or NOTION_PAGE_ID not set. Check your .env file.")
@@ -74,37 +75,49 @@ def sendEmail(email_template):
     )
     mail.send(msg)
 
-def load_posts_from_notion():
-    results = notion.databases.query(
-        database_id=DATABASE_ID,
+def get_data_source_id(database_id: str) -> str:
+    resp = notion.databases.retrieve(database_id=database_id)
+    data_sources = resp.get("data_sources", [])
+    if not data_sources:
+        raise Exception("No data sources found in database")
+    # pick the first (or choose by name if multiple)
+    return data_sources[0]["id"]
+
+def load_posts_from_notion(data_source_id: str):
+    # 1. Query the data source
+    resp = notion.data_sources.query(
+        data_source_id=data_source_id,
         filter={
             "property": "Status",
             "status": {
                 "equals": "Completed"
             }
         },
-        sorts=[  # must use `timestamp`, not "Created time"
+        sorts=[
             {"timestamp": "created_time", "direction": "descending"}
         ]
     )
-    
+
     posts = []
-    for item in results["results"]:
+
+    for item in resp["results"]:
         post_id = item["id"]
 
+        # 2. Extract title
         title = "Untitled"
         if "Project Name" in item["properties"]:
             project_name = item["properties"]["Project Name"]["title"]
             if project_name:
                 title = project_name[0]["plain_text"]
 
-        
+        # 3. Load block content
         blocks = notion.blocks.children.list(post_id)
         content = ""
 
         for block in blocks["results"]:
             t = block["type"]
-            rich_texts = block[t].get("rich_text", [])
+            data = block[t]
+            rich_texts = data.get("rich_text", [])
             text = " ".join([r["plain_text"] for r in rich_texts])
 
             if t == "paragraph":
@@ -126,17 +139,21 @@ def load_posts_from_notion():
             elif t == "code":
                 content += f"<pre><code>{text}</code></pre>"
             elif t == "to_do":
-                checked = block[t].get("checked", False)
-                checkbox = "☑" if checked else "☐"
+                checkbox = "☑" if data.get("checked", False) else "☐"
                 content += f"{checkbox} {text}<br>"
             elif t == "toggle":
                 content += f"<details><summary>{text}</summary></details>"
             elif t == "image":
-                image_url = block[t]["file"]["url"]
+                image_url = data["file"]["url"]
                 content += f'<img src="{image_url}" alt="Image"><br>'
 
-        posts.append({"title": title, "content": content})
+        posts.append({
+            "title": title,
+            "content": content
+        })
+
     return posts
+
 
 def get_page_icon(page_id):
     page = notion.pages.retrieve(page_id)
@@ -158,7 +175,8 @@ def about():
 
 @app.route("/portfolio", methods=["GET"])
 def portfolio():
-    posts = load_posts_from_notion()
+    data_source_id = get_data_source_id(DATABASE_ID)
+    posts = load_posts_from_notion(data_source_id=data_source_id)
     page_icon = get_page_icon(PAGE_ID)
     
     if not posts:
