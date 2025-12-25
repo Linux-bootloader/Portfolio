@@ -20,4 +20,4 @@ COPY . .
 # uWSGI port
 EXPOSE 8000
 
-CMD ["uwsgi", "--ini", "uwsgi.ini"]
+CMD ["uwsgi", "--ini", "docker-uwsgi.ini"]
