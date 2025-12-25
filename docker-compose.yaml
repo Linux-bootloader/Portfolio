@@ -4,6 +4,11 @@ networks:
 
 services:
   portfolio:
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
     image: docker-repo.jacobjones.com.au/portfolio:latest
     container_name: portfolio
     restart: always
