@@ -710,6 +710,7 @@ nav a {
   }
 
   .home {
+    flex-direction: column;
     padding: 80px 5% 40px;
     background: none;
     align-items: flex-start;
@@ -722,9 +723,12 @@ nav a {
   }
 
   .home-sci {
-    position: absolute;
-    display: flex;
-    bottom: 0;
+    position: relative;
+    bottom: auto;
+    width: 100%;
+    margin-top: 16px;
+    justify-content: center;
+    gap: 14px;
   }
 
   .portfolio-container,
@@ -743,6 +747,12 @@ nav a {
     position: static;
     margin-top: 16px;
   }
+
+  .contact-info,
+  .contact-form {
+    margin: 0;
+    padding: 20px;
+  }
 }
 
 @media (max-width: 800px) {
@@ -756,6 +766,12 @@ nav a {
 
   .sidebar {
     width: 80%;
+  }
+}
+
+@media (max-width: 400px) {
+  .sidebar {
+    width: 100%;
   }
 }
 
