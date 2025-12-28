@@ -35,3 +35,28 @@ jobs:
           platforms: linux/amd64,linux/arm64
           push: true
           tags: ${{ steps.meta.outputs.tags }}
+
+      # ✅ ntfy notification (runs even on failure)
+      - name: Notify ntfy (GitHub topic)
+        if: always()
+        env:
+          NTFY_TOKEN: ${{ secrets.NTFY_ACCESS_TOKEN }}
+        run: |
+          STATUS="${{ job.status }}"
+          ICON="✅"
+          PRIORITY=3
+
+          if [ "$STATUS" != "success" ]; then
+            ICON="❌"
+            PRIORITY=5
+          fi
+
+          curl -X POST https://ntfy.jacobjones.com.au/github \
+            -H "Authorization: Bearer $NTFY_TOKEN" \
+            -H "Title: $ICON Portfolio Docker Release" \
+            -H "Priority: $PRIORITY" \
+            -H "Tags: github,docker,ci" \
+            -d "Repository: ${{ github.repository }}
+          Ref: ${{ github.ref_name }}
+          Commit: ${{ github.sha }}
+          Status: $STATUS"
