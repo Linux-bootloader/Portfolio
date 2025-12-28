@@ -38,3 +38,12 @@ function hideSidebar(){
     const sidebar = document.querySelector('.sidebar')
     sidebar.style.display = 'none'
 }
+
+function validateForm() {
+    const form = document.getElementById('contactForm');
+    if (!form) {
+        return true;
+    }
+
+    return form.reportValidity();
+}

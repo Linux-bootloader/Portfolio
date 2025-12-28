@@ -26,6 +26,10 @@ SMTP_API_TOKEN = os.getenv("SMTP_API_TOKEN")
 
 if not NOTION_API_KEY or not DATABASE_ID or not PAGE_ID:
     raise ValueError("⚠️ NOTION_API_KEY or NOTION_DATABASE_ID or NOTION_PAGE_ID not set. Check your .env file.")
+if not app.secret_key:
+    raise ValueError("⚠️ FLASK_SECRET_KEY not set. Check your .env file.")
+if not SMTP_API_TOKEN:
+    raise ValueError("⚠️ SMTP_API_TOKEN not set. Check your .env file.")
 
 notion = Client(auth=NOTION_API_KEY)
 
@@ -144,8 +148,10 @@ def load_posts_from_notion(data_source_id: str):
             elif t == "toggle":
                 content += f"<details><summary>{text}</summary></details>"
             elif t == "image":
-                image_url = data["file"]["url"]
-                content += f'<img src="{image_url}" alt="Image"><br>'
+                image_data = data.get("file") or data.get("external") or {}
+                image_url = image_data.get("url")
+                if image_url:
+                    content += f'<img src="{image_url}" alt="Image"><br>'
 
         posts.append({
             "title": title,
@@ -158,10 +164,14 @@ def load_posts_from_notion(data_source_id: str):
 def get_page_icon(page_id):
     page = notion.pages.retrieve(page_id)
     icon = page.get("icon")
-    if icon["type"] == "emoji":
-        return icon["emoji"]
-    elif icon["type"] in ["file", "external"]:
-        return icon[icon["type"]]["url"]
+    if not icon:
+        return None
+
+    icon_type = icon.get("type")
+    if icon_type == "emoji":
+        return icon.get("emoji")
+    if icon_type in ["file", "external"]:
+        return icon.get(icon_type, {}).get("url")
 
     return None
 
@@ -175,15 +185,31 @@ def about():
 
 @app.route("/portfolio", methods=["GET"])
 def portfolio():
-    data_source_id = get_data_source_id(DATABASE_ID)
-    posts = load_posts_from_notion(data_source_id=data_source_id)
-    page_icon = get_page_icon(PAGE_ID)
-    
-    if not posts:
-        return render_template("portfolio.html", post={"title": "No Posts Found", "content": "Jacob has not just posted anything as of yet"}, prev_index=0, next_index=0)
+    page_icon = None
+    posts = []
 
-    index = int(request.args.get("index", 0))   
-    index = max(0, min(index, len(posts) - 1))  
+    try:
+        data_source_id = get_data_source_id(DATABASE_ID)
+        posts = load_posts_from_notion(data_source_id=data_source_id)
+        page_icon = get_page_icon(PAGE_ID)
+    except Exception as exc:
+        app.logger.exception("Failed to load Notion content: %s", exc)
+
+    if not posts:
+        return render_template(
+            "portfolio.html",
+            page_icon=page_icon,
+            post={"title": "No Posts Found", "content": "Jacob has not just posted anything as of yet"},
+            prev_index=0,
+            next_index=0,
+        )
+
+    try:
+        index = int(request.args.get("index", 0))
+    except (TypeError, ValueError):
+        index = 0
+
+    index = max(0, min(index, len(posts) - 1))
 
     post = posts[index]
 
@@ -247,4 +273,3 @@ def verify_email(token):
 
     flash('Your email has been verified successfully and your message has been sent!', 'success')
     return redirect(url_for('contact'))
-
